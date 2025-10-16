@@ -6,6 +6,9 @@ use App\Repository\EditorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: "editors")]
 #[ORM\Entity(repositoryClass: EditorRepository::class)]
@@ -14,18 +17,32 @@ class Editor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["editor", "video_game"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["editor", "video_game"])]
+    #[Assert\Length(
+        min:1,
+        max:50,
+        minMessage: 'Le champ nom ne doit pas être inférieur à {{ limit }} caractères',
+        maxMessage: 'Le champ nom ne doit pas dépasser {{ limit }} caractères',
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["editor", "video_game"])]
+    #[Assert\NotBlank(
+        message: "Le champ pays ne doit pas être vide."
+    )]
     private ?string $country = null;
 
     /**
      * @var Collection<int, VideoGame>
      */
     #[ORM\OneToMany(targetEntity: VideoGame::class, mappedBy: 'editor')]
+    #[Groups("editor")]
+    #[MaxDepth(1)]
     private Collection $videoGames;
 
     public function __construct()
@@ -74,7 +91,7 @@ class Editor
     {
         if (!$this->videoGames->contains($videoGame)) {
             $this->videoGames->add($videoGame);
-            $videoGame->setEditorId($this);
+            $videoGame->setEditor($this);
         }
 
         return $this;
@@ -84,8 +101,8 @@ class Editor
     {
         if ($this->videoGames->removeElement($videoGame)) {
             // set the owning side to null (unless already changed)
-            if ($videoGame->getEditorId() === $this) {
-                $videoGame->setEditorId(null);
+            if ($videoGame->getEditor() === $this) {
+                $videoGame->setEditor(null);
             }
         }
 

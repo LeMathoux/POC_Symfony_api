@@ -6,6 +6,8 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: "users")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -15,21 +17,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("user")]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups("user")]
+    #[Assert\NotBlank(message: 'L’adresse e-mail est obligatoire.')]
+    #[Assert\Email(
+        message: 'L’adresse e-mail "{{ value }}" n’est pas valide.',
+        mode: 'strict'
+    )]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups("user")]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups("user")]
+    #[Assert\NotBlank(message: 'Le mot de passe est obligatoire.')]
+    #[Assert\Length(
+        min: 8,
+        max: 64,
+        minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'Le mot de passe ne peut pas dépasser {{ limit }} caractères.'
+    )]
+    #[Assert\Regex(
+        pattern: '/[A-Z]/',
+        message: 'Le mot de passe doit contenir au moins une lettre majuscule.'
+    )]
+    #[Assert\Regex(
+        pattern: '/[a-z]/',
+        message: 'Le mot de passe doit contenir au moins une lettre minuscule.'
+    )]
+    #[Assert\Regex(
+        pattern: '/\d/',
+        message: 'Le mot de passe doit contenir au moins un chiffre.'
+    )]
+    #[Assert\Regex(
+        pattern: '/[\W_]/',
+        message: 'Le mot de passe doit contenir au moins un caractère spécial.'
+    )]
     private ?string $password = null;
 
     public function getId(): ?int

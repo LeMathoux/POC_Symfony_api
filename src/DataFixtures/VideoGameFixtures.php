@@ -24,7 +24,7 @@ class VideoGameFixtures extends Fixture implements DependentFixtureInterface
             $videoGame->setReleaseDate(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-10 years', 'now')));
 
             $randomEditor = $this->getReference(EditorFixtures::EDITOR_REFERENCE . $faker->numberBetween(0, 4), Editor::class);
-            $videoGame->setEditorId($randomEditor);
+            $videoGame->setEditor($randomEditor);
 
             $randomCategories = $faker->randomElements(range(0, 9), rand(1, 3));
             foreach ($randomCategories as $catIndex) {

@@ -16,6 +16,14 @@ class EditorRepository extends ServiceEntityRepository
         parent::__construct($registry, Editor::class);
     }
 
+    public function getAllWithPagination($page, $limit){
+        $qb = $this->createQueryBuilder('e')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+            
+        return $qb->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return Editor[] Returns an array of Editor objects
     //     */
