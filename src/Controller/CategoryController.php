@@ -37,7 +37,7 @@ final class CategoryController extends AbstractController
     }
 
     #[Route('/api/category', name: 'app_category_list', methods:['GET'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à visualiser les catégories')]
+    #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser les catégories')]
     #[OA\Get(
         path: '/api/category',
         summary: 'Liste toutes les catégories',
@@ -98,7 +98,7 @@ final class CategoryController extends AbstractController
     }
 
     #[Route('/api/category/{id}', name: 'app_category_by_id', methods:['GET'], requirements :['id' => Requirement::DIGITS])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à visualiser les catégories')]
+    #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser les catégories')]
     #[OA\Get(
         path: '/api/category/{id}',
         summary: 'Récupère une catégorie par son ID',
@@ -148,7 +148,7 @@ final class CategoryController extends AbstractController
     }
 
     #[Route('/api/category/{id}/delete', name:'app_category_delete', methods:['DELETE'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à supprimer des catégories')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à supprimer des catégories')]
     #[OA\Delete(
         path: '/api/category/{id}/delete',
         summary: 'Supprime une catégorie',
@@ -190,7 +190,7 @@ final class CategoryController extends AbstractController
     }
 
     #[Route('api/category/{id}/update', name:'app_category_update', methods:['PUT'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à modifier des catégories')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à modifier des catégories')]
     #[OA\Put(
         path: '/api/category/{id}/update',
         summary: 'Modifie une catégorie existante',
@@ -277,7 +277,7 @@ final class CategoryController extends AbstractController
     }
 
     #[Route('api/category/new', name:'app_category_create', methods:['POST'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à créer des catégories')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à créer des catégories')]
     #[OA\Post(
         path: '/api/category/new',
         summary: 'Crée une nouvelle catégorie',

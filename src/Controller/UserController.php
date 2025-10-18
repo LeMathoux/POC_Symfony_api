@@ -37,7 +37,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/api/user', name: 'app_user_list', methods:['GET'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à visualiser des utilisateurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à visualiser des utilisateurs')]
     #[OA\Get(
         path: '/api/user',
         summary: 'Liste tous les utilisateurs',
@@ -94,7 +94,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/api/user/{id}', name: 'app_user_by_id', methods:['GET'], requirements:['id' => Requirement::DIGITS])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à visualiser des utilisateurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à visualiser des utilisateurs')]
     #[OA\Get(
         path: '/api/user/{id}',
         summary: 'Détails d\'un utilisateur',
@@ -141,7 +141,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/api/user/{id}/delete', name:'app_user_delete', methods:['DELETE'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à supprimer des utilisateurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à supprimer des utilisateurs')]
     #[OA\Delete(
         path: '/api/user/{id}/delete',
         summary: 'Supprimer un utilisateur',
@@ -184,7 +184,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('api/user/{id}/update', name:'app_user_update', methods:['PUT'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à modifier des utilisateurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à modifier des utilisateurs')]
     #[OA\Put(
         path: '/api/user/{id}/update',
         summary: 'Mettre à jour un utilisateur',
@@ -271,7 +271,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('api/user/new', name:'app_user_create', methods:['POST'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à créer des utilisateurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à créer des utilisateurs')]
     #[OA\Post(
         path: '/api/user/new',
         summary: 'Créer un nouvel utilisateur',

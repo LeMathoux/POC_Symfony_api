@@ -39,7 +39,7 @@ final class VideoGameController extends AbstractController
     }
 
     #[Route('/api/video_game', name: 'app_video_game_list', methods:['GET'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à visualiser des jeux video')]
+    #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser des jeux video')]
     #[OA\Get(
         path: '/api/video_game',
         summary: 'Liste tous les jeux vidéo',
@@ -171,7 +171,7 @@ final class VideoGameController extends AbstractController
     }
 
     #[Route('/api/video_game/{id}/delete', name:'app_video_game_delete', methods:['DELETE'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à supprimer des jeux video')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à supprimer des jeux video')]
     #[OA\Delete(
         path: '/api/video_game/{id}/delete',
         summary: 'Supprimer un jeu vidéo',
@@ -214,7 +214,7 @@ final class VideoGameController extends AbstractController
     }
 
     #[Route('api/video_game/{id}/update', name:'app_video_game_update', methods:['PUT'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à modifier des jeux video')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à modifier des jeux video')]
     #[OA\Put(
         path: '/api/video_game/{id}/update',
         summary: 'Mettre à jour un jeu vidéo',
@@ -303,7 +303,7 @@ final class VideoGameController extends AbstractController
     }
 
     #[Route('api/video_game/new', name:'app_video_game_create', methods:['POST'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à créer des jeux video')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à créer des jeux video')]
     #[OA\Post(
         path: '/api/video_game/new',
         summary: 'Créer un nouveau jeu vidéo',

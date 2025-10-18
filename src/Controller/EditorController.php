@@ -37,7 +37,7 @@ final class EditorController extends AbstractController
     }
 
     #[Route('/api/editor', name: 'app_editor_list', methods:['GET'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à visualiser des éditeurs')]
+    #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser des éditeurs')]
     #[OA\Get(
         path: '/api/editor',
         summary: 'Liste tous les éditeurs',
@@ -99,7 +99,7 @@ final class EditorController extends AbstractController
     }
 
     #[Route('/api/editor/{id}', name: 'app_editor_by_id', methods:['GET'], requirements:['id' => Requirement::DIGITS])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à visualiser des éditeurs')]
+    #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser des éditeurs')]
     #[OA\Get(
         path: '/api/editor/{id}',
         summary: 'Détails d\'un éditeur',
@@ -151,7 +151,7 @@ final class EditorController extends AbstractController
     }
 
     #[Route('/api/editor/{id}/delete', name:'app_editor_delete', methods:['DELETE'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à supprimer des éditeurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à supprimer des éditeurs')]
     #[OA\Delete(
         path: '/api/editor/{id}/delete',
         summary: 'Supprimer un éditeur',
@@ -194,7 +194,7 @@ final class EditorController extends AbstractController
     }
 
     #[Route('api/editor/{id}/update', name:'app_editor_update', methods:['PUT'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à modifier des éditeurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à modifier des éditeurs')]
     #[OA\Put(
         path: '/api/editor/{id}/update',
         summary: 'Mettre à jour un éditeur',
@@ -275,7 +275,7 @@ final class EditorController extends AbstractController
     }
 
     #[Route('api/editor/new', name:'app_editor_create', methods:['POST'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à créer des éditeurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à créer des éditeurs')]
     #[OA\Post(
         path: '/api/editor/new',
         summary: 'Créer un nouvel éditeur',
