@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Attributes as OA;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -12,6 +13,45 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: "users")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[OA\Schema(
+    schema: 'User',
+    title: 'User',
+    description: 'Modèle d\'utilisateur',
+    required: ['email', 'password'],
+    type: 'object',
+    properties: [
+        new OA\Property(
+            property: 'id',
+            type: 'integer',
+            description: 'Identifiant unique de l\'utilisateur',
+            example: 1
+        ),
+        new OA\Property(
+            property: 'email',
+            type: 'string',
+            description: 'Adresse email de l\'utilisateur (utilisée pour l\'authentification)',
+            format: 'email',
+            maxLength: 180,
+            example: 'user@example.com'
+        ),
+        new OA\Property(
+            property: 'roles',
+            type: 'array',
+            description: 'Rôles de l\'utilisateur',
+            items: new OA\Items(type: 'string', example: 'ROLE_USER'),
+            example: ['ROLE_USER']
+        ),
+        new OA\Property(
+            property: 'password',
+            type: 'string',
+            description: 'Mot de passe de l\'utilisateur (8-64 caractères)',
+            format: 'password',
+            minLength: 8,
+            maxLength: 64,
+            example: 'password123'
+        )
+    ]
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -25,7 +65,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: 'L’adresse e-mail est obligatoire.')]
     #[Assert\Email(
         message: 'L’adresse e-mail "{{ value }}" n’est pas valide.',
-        mode: 'strict'
     )]
     private ?string $email = null;
 

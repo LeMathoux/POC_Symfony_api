@@ -6,12 +6,63 @@ use App\Repository\VideoGameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: "video_games")]
 #[ORM\Entity(repositoryClass: VideoGameRepository::class)]
+#[OA\Schema(
+    schema: 'VideoGame',
+    title: 'VideoGame',
+    description: 'Modèle de jeu vidéo',
+    required: ['title', 'releaseDate', 'editor', 'categories'],
+    type: 'object',
+    properties: [
+        new OA\Property(
+            property: 'id', 
+            type: 'integer', 
+            description: 'Identifiant unique du jeu vidéo',
+            example: 1
+        ),
+        new OA\Property(
+            property: 'title', 
+            type: 'string', 
+            description: 'Titre du jeu vidéo',
+            maxLength: 50,
+            example: 'Super Mario Bros'
+        ),
+        new OA\Property(
+            property: 'releaseDate',
+            type: 'string',
+            format: 'date-time',
+            description: 'Date de sortie du jeu',
+            example: '2023-10-20T00:00:00+00:00'
+        ),
+        new OA\Property(
+            property: 'editor',
+            type: 'object',
+            description: 'Éditeur du jeu',
+            properties: [
+                new OA\Property(property: 'id', type: 'integer', example: 1),
+                new OA\Property(property: 'name', type: 'string', example: 'Nintendo'),
+                new OA\Property(property: 'country', type: 'string', example: 'Japon')
+            ]
+        ),
+        new OA\Property(
+            property: 'categories',
+            type: 'array',
+            description: 'Catégories du jeu',
+            items: new OA\Items(
+                properties: [
+                    new OA\Property(property: 'id', type: 'integer', example: 1),
+                    new OA\Property(property: 'name', type: 'string', example: 'Action')
+                ]
+            )
+        )
+    ]
+)]
 class VideoGame
 {
     #[ORM\Id]
@@ -40,7 +91,7 @@ class VideoGame
     )]
     private ?\DateTimeImmutable $releaseDate = null;
 
-    #[ORM\ManyToOne(inversedBy: 'videoGames')]
+    #[ORM\ManyToOne(targetEntity: Editor::class, inversedBy: 'videoGames', cascade: ['persist'])]
     #[Groups(["video_game"])]
     #[MaxDepth(1)]
     #[Assert\NotBlank(

@@ -6,12 +6,52 @@ use App\Repository\EditorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: "editors")]
 #[ORM\Entity(repositoryClass: EditorRepository::class)]
+#[OA\Schema(
+    schema: 'Editor',
+    title: 'Editor',
+    description: 'Modèle d\'éditeur de jeux vidéo',
+    required: ['name', 'country'],
+    type: 'object',
+    properties: [
+        new OA\Property(
+            property: 'id', 
+            type: 'integer', 
+            description: 'Identifiant unique de l\'éditeur',
+            example: 1
+        ),
+        new OA\Property(
+            property: 'name', 
+            type: 'string', 
+            description: 'Nom de l\'éditeur',
+            maxLength: 50,
+            example: 'Nintendo'
+        ),
+        new OA\Property(
+            property: 'country', 
+            type: 'string', 
+            description: 'Pays d\'origine de l\'éditeur',
+            example: 'Japon'
+        ),
+        new OA\Property(
+            property: 'videoGames',
+            type: 'array',
+            description: 'Liste des jeux vidéo de cet éditeur',
+            items: new OA\Items(
+                properties: [
+                    new OA\Property(property: 'id', type: 'integer', example: 1),
+                    new OA\Property(property: 'title', type: 'string', example: 'Super Mario Bros')
+                ]
+            )
+        )
+    ]
+)]
 class Editor
 {
     #[ORM\Id]

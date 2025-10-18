@@ -10,8 +10,69 @@ nelmio_api_doc:
                     type: http
                     scheme: bearer
                     bearerFormat: JWT
+            schemas:
+                Credentials:
+                    type: object
+                    properties:
+                        email:
+                            type: string
+                            format: email
+                            example: user@example.com
+                        password:
+                            type: string
+                            format: password
+                            example: votre_mot_de_passe
+                    required:
+                        - email
+                        - password
+                Token:
+                    type: object
+                    properties:
+                        token:
+                            type: string
+                            example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...
         security:
             - Bearer: []
+        paths:
+            /api/login_check:
+                post:
+                    tags:
+                        - Authentification
+                    summary: Connexion à l'API
+                    description: |
+                        Authentification pour obtenir un token JWT.
+                        
+                        Utilisation :
+                        1. Envoyez vos identifiants (email/password)
+                        2. Récupérez le token JWT
+                        3. Utilisez ce token dans l'en-tête Authorization des requêtes suivantes
+                    requestBody:
+                        required: true
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/Credentials'
+                    responses:
+                        '200':
+                            description: Authentification réussie
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Token'
+                        '401':
+                            description: Identifiants invalides
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            code:
+                                                type: integer
+                                                example: 401
+                                            message:
+                                                type: string
+                                                example: Invalid credentials.
+                    security: []  # Pas besoin d'authentification pour cette route
     areas: # to filter documented areas
         path_patterns:
             - ^/api(?!/doc$) # Exclude /api/doc
