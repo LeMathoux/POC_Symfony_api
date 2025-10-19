@@ -38,6 +38,7 @@ final class CategoryController extends AbstractController
 
     #[Route('/api/category', name: 'app_category_list', methods:['GET'])]
     #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser les catégories')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à visualiser des catégories')]
     #[OA\Get(
         path: '/api/category',
         summary: 'Liste toutes les catégories',
@@ -94,11 +95,12 @@ final class CategoryController extends AbstractController
         $page = $request->get('page', 1);
         $categoryList = $this->categoryRepository->getAllWithPagination($page, $limit);
 
-        return $this->json($categoryList, Response::HTTP_OK, [], ['groups' => 'category']);
+        return $this->json($categoryList, Response::HTTP_OK, [], ['groups' => 'category:read']);
     }
 
     #[Route('/api/category/{id}', name: 'app_category_by_id', methods:['GET'], requirements :['id' => Requirement::DIGITS])]
     #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser les catégories')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à visualiser des catégories')]
     #[OA\Get(
         path: '/api/category/{id}',
         summary: 'Récupère une catégorie par son ID',
@@ -144,7 +146,7 @@ final class CategoryController extends AbstractController
     )]
     public function getCategory(Category $category, CategoryRepository $categoryRepository): JsonResponse
     {
-        return $this->json($category, Response::HTTP_OK, [], ['groups' => 'category']);
+        return $this->json($category, Response::HTTP_OK, [], ['groups' => 'category:read']);
     }
 
     #[Route('/api/category/{id}/delete', name:'app_category_delete', methods:['DELETE'])]
@@ -273,7 +275,7 @@ final class CategoryController extends AbstractController
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        return $this->json(['statut'=>'success'], Response::HTTP_OK, ['Location' => $location], ['groups' => 'category']);
+        return $this->json(['statut'=>'success'], Response::HTTP_OK, ['Location' => $location], ['groups' => 'category:write']);
     }
 
     #[Route('api/category/new', name:'app_category_create', methods:['POST'])]
@@ -346,6 +348,6 @@ final class CategoryController extends AbstractController
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        return $this->json(['statut'=>'success'], Response::HTTP_CREATED, ['Location' => $location], ['groups' => 'category']);
+        return $this->json(['statut'=>'success'], Response::HTTP_CREATED, ['Location' => $location], ['groups' => 'category:write']);
     }
 }

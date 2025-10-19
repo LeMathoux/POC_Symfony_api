@@ -38,6 +38,7 @@ final class EditorController extends AbstractController
 
     #[Route('/api/editor', name: 'app_editor_list', methods:['GET'])]
     #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser des éditeurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à visualiser des éditeurs')]
     #[OA\Get(
         path: '/api/editor',
         summary: 'Liste tous les éditeurs',
@@ -95,11 +96,12 @@ final class EditorController extends AbstractController
         $page = $request->get('page', 1);
         $editorList = $this->editorRepository->getAllWithPagination($page, $limit);
 
-        return $this->json($editorList, Response::HTTP_OK, [], ['groups' => 'editor']);
+        return $this->json($editorList, Response::HTTP_OK, [], ['groups' => 'editor:read']);
     }
 
     #[Route('/api/editor/{id}', name: 'app_editor_by_id', methods:['GET'], requirements:['id' => Requirement::DIGITS])]
     #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser des éditeurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à visualiser des éditeurs')]
     #[OA\Get(
         path: '/api/editor/{id}',
         summary: 'Détails d\'un éditeur',
@@ -147,7 +149,7 @@ final class EditorController extends AbstractController
     )]
     public function getEditorById(Editor $editor, EditorRepository $editorRepository): JsonResponse
     {
-        return $this->json($editor, Response::HTTP_OK, [], ['groups' => 'editor']);
+        return $this->json($editor, Response::HTTP_OK, [], ['groups' => 'editor:read']);
     }
 
     #[Route('/api/editor/{id}/delete', name:'app_editor_delete', methods:['DELETE'])]
@@ -271,7 +273,7 @@ final class EditorController extends AbstractController
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        return $this->json(['statut'=>'success'], Response::HTTP_OK, ['Location' => $location]);
+        return $this->json(['statut'=>'success'], Response::HTTP_OK, ['Location' => $location], ['groups' => 'editor:write']);
     }
 
     #[Route('api/editor/new', name:'app_editor_create', methods:['POST'])]
@@ -338,6 +340,6 @@ final class EditorController extends AbstractController
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        return $this->json(['statut'=>'success'], Response::HTTP_OK, ['Location' => $location]);
+        return $this->json(['statut'=>'success'], Response::HTTP_OK, ['Location' => $location], ['groups' => 'editor:write']);
     }
 }

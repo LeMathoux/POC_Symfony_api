@@ -39,7 +39,8 @@ final class VideoGameController extends AbstractController
     }
 
     #[Route('/api/video_game', name: 'app_video_game_list', methods:['GET'])]
-    #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser des jeux video')]
+    #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à visualiser des jeux video')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\êtes pas autorisé à visualiser des jeux video')]
     #[OA\Get(
         path: '/api/video_game',
         summary: 'Liste tous les jeux vidéo',
@@ -106,11 +107,12 @@ final class VideoGameController extends AbstractController
         $page = $request->get('page', 1);
         $videoGameList = $this->videoGameRepository->getAllWithPagination($page, $limit);
 
-        return $this->json($videoGameList, Response::HTTP_OK, [], ['groups' => 'video_game']);
+        return $this->json($videoGameList, Response::HTTP_OK, [], ['groups' => 'video_game:read']);
     }
 
     #[Route('/api/video_game/{id}', name: 'app_video_game_by_id', methods:['GET'], requirements:['id' => Requirement::DIGITS])]
     #[IsGranted('ROLE_USER', message: 'Vous n\êtes pas autorisé à visualiser des jeux video')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\êtes pas autorisé à visualiser des jeux video')]
     #[OA\Get(
         path: '/api/video_game/{id}',
         summary: 'Détails d\'un jeu vidéo',
@@ -167,7 +169,7 @@ final class VideoGameController extends AbstractController
     )]
     public function getEditorById(VideoGame $videoGame, VideoGameRepository $editorRepository): JsonResponse
     {
-        return $this->json($videoGame, Response::HTTP_OK, [], ['groups' => 'video_game']);
+        return $this->json($videoGame, Response::HTTP_OK, [], ['groups' => 'video_game:read']);
     }
 
     #[Route('/api/video_game/{id}/delete', name:'app_video_game_delete', methods:['DELETE'])]

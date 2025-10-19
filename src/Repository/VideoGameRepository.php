@@ -24,6 +24,15 @@ class VideoGameRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getfutureReleases(\DateTimeImmutable $currentDate){
+        $qb = $this->createQueryBuilder('vg')
+            ->andWhere('vg.releaseDate > :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->orderBy('vg.releaseDate', 'ASC');
+            
+        return $qb->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return VideoGame[] Returns an array of VideoGame objects
     //     */

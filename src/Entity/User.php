@@ -49,7 +49,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             minLength: 8,
             maxLength: 64,
             example: 'password123'
-        )
+        ),
+        new OA\Property(
+            property: 'subcription_to_newsletter',
+            type: 'boolean',
+            description: 'Indique si l\'utilisateur est abonné à la newsletter',
+            example: true
+        ),
     ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -57,11 +63,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups("user")]
+    #[Groups("user:read", "user:write")]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    #[Groups("user")]
+    #[Groups("user:read", "user:write")]
     #[Assert\NotBlank(message: 'L’adresse e-mail est obligatoire.')]
     #[Assert\Email(
         message: 'L’adresse e-mail "{{ value }}" n’est pas valide.',
@@ -72,14 +78,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Groups("user")]
+    #[Groups("user:read", "user:write")]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups("user")]
+    #[Groups("user:read", "user:write")]
     #[Assert\NotBlank(message: 'Le mot de passe est obligatoire.')]
     #[Assert\Length(
         min: 8,
@@ -104,6 +110,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         message: 'Le mot de passe doit contenir au moins un caractère spécial.'
     )]
     private ?string $password = null;
+
+    #[ORM\Column]
+    #[Groups("user:read", "user:write")]
+    private bool $subcription_to_newsletter = false;
 
     public function getId(): ?int
     {
@@ -184,5 +194,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    public function isSubcriptionToNewsletter(): ?bool
+    {
+        return $this->subcription_to_newsletter;
+    }
+
+    public function setSubcriptionToNewsletter(bool $subcription_to_newsletter): static
+    {
+        $this->subcription_to_newsletter = $subcription_to_newsletter;
+
+        return $this;
     }
 }

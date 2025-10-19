@@ -57,11 +57,11 @@ class Editor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["editor", "video_game"])]
+    #[Groups(["editor:read", "editor:write", "video_game:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["editor", "video_game"])]
+    #[Groups(["editor:read", "editor:write", "video_game:read"])]
     #[Assert\Length(
         min:1,
         max:50,
@@ -71,7 +71,7 @@ class Editor
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["editor", "video_game"])]
+    #[Groups(["editor:read", "editor:write", "video_game:read"])]
     #[Assert\NotBlank(
         message: "Le champ pays ne doit pas être vide."
     )]
@@ -81,7 +81,7 @@ class Editor
      * @var Collection<int, VideoGame>
      */
     #[ORM\OneToMany(targetEntity: VideoGame::class, mappedBy: 'editor')]
-    #[Groups("editor")]
+    #[Groups("editor:read")]
     #[MaxDepth(1)]
     private Collection $videoGames;
 

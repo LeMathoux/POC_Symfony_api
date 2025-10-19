@@ -73,6 +73,11 @@ final class UserController extends AbstractController
                                 type: 'array',
                                 items: new OA\Items(type: 'string'),
                                 example: ['ROLE_USER']
+                            ),
+                            new OA\Property(
+                                property: 'subcription_to_newsletter',
+                                type: 'boolean',
+                                example: true
                             )
                         ]
                     )
@@ -90,10 +95,11 @@ final class UserController extends AbstractController
         $page = $request->get('page', 1);
         $userList = $this->userRepository->getAllWithPagination($page, $limit);
 
-        return $this->json($userList, Response::HTTP_OK, [], ['groups' => 'user']);
+        return $this->json($userList, Response::HTTP_OK, [], ['groups' => 'user:read']);
     }
 
     #[Route('/api/user/{id}', name: 'app_user_by_id', methods:['GET'], requirements:['id' => Requirement::DIGITS])]
+    #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à visualiser des utilisateurs')]
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à visualiser des utilisateurs')]
     #[OA\Get(
         path: '/api/user/{id}',
@@ -121,6 +127,11 @@ final class UserController extends AbstractController
                             type: 'array',
                             items: new OA\Items(type: 'string'),
                             example: ['ROLE_USER']
+                        ),
+                        new OA\Property(
+                            property: 'subcription_to_newsletter',
+                            type: 'boolean',
+                            example: true
                         )
                     ]
                 )
@@ -137,11 +148,12 @@ final class UserController extends AbstractController
     )]
     public function getUserById(User $user, UserRepository $userRepository): JsonResponse
     {
-        return $this->json($user, Response::HTTP_OK, [], ['groups' => 'user']);
+        return $this->json($user, Response::HTTP_OK, [], ['groups' => 'user:read']);
     }
 
     #[Route('/api/user/{id}/delete', name:'app_user_delete', methods:['DELETE'])]
-    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à supprimer des utilisateurs')]
+    #[IsGranted('ROLE_USER', message: 'Vous n\'êtes pas autorisé à supprimer des utilisateurs')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à visualiser des utilisateurs')]
     #[OA\Delete(
         path: '/api/user/{id}/delete',
         summary: 'Supprimer un utilisateur',
@@ -209,6 +221,11 @@ final class UserController extends AbstractController
                         type: 'array',
                         items: new OA\Items(type: 'string'),
                         example: ['ROLE_USER']
+                    ),
+                    new OA\Property(
+                        property: 'subcription_to_newsletter',
+                        type: 'boolean',
+                        example: true
                     )
                 ]
             )
@@ -288,6 +305,11 @@ final class UserController extends AbstractController
                         type: 'array',
                         items: new OA\Items(type: 'string'),
                         example: ['ROLE_USER']
+                    ),
+                    new OA\Property(
+                        property: 'subcription_to_newsletter',
+                        type: 'boolean',
+                        example: true
                     )
                 ]
             )

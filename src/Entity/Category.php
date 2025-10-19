@@ -10,7 +10,6 @@ use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
-use OpenApi\Annotations as OAA;
 
 #[ORM\Table(name: "categories")]
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -52,7 +51,7 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["category", "video_game"])]
+    #[Groups(["category:read", "categoy:write", "video_game:read"])]
     #[OA\Property(
         description: 'Identifiant unique de la catégorie',
         type: 'integer',
@@ -62,7 +61,7 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["category", "video_game"])]
+    #[Groups(["category:read", "categoy:write", "video_game:read"])]
     #[Assert\NotBlank(
         message: "Le champ nom ne doit pas être vide."
     )]
@@ -84,7 +83,7 @@ class Category
      * @var Collection<int, VideoGame>
      */
     #[ORM\ManyToMany(targetEntity: VideoGame::class, mappedBy: 'categories')]
-    #[Groups(["category"])]
+    #[Groups(["category:read"])]
     #[MaxDepth(1)]
     #[OA\Property(
         description: 'Liste des jeux vidéo dans cette catégorie',

@@ -68,11 +68,11 @@ class VideoGame
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["video_game", "editor", "category"])]
+    #[Groups(["video_game:read","video_game:write", "editor:read", "category:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["video_game", "editor", "category"])]
+    #[Groups(["video_game:read","video_game:write", "editor:read", "category:read"])]
     #[Assert\NotBlank(
         message: "Le champ titre ne doit pas être vide."
     )]
@@ -85,14 +85,14 @@ class VideoGame
     private ?string $title = null;
 
     #[ORM\Column]
-    #[Groups(["video_game", "editor", "category"])]
+    #[Groups(["video_game:read","video_game:write", "editor:read", "category:read"])]
     #[Assert\NotBlank(
         message: "Le champ date de sortie ne doit pas être vide."
     )]
     private ?\DateTimeImmutable $releaseDate = null;
 
     #[ORM\ManyToOne(targetEntity: Editor::class, inversedBy: 'videoGames', cascade: ['persist'])]
-    #[Groups(["video_game"])]
+    #[Groups(["video_game:read"])]
     #[MaxDepth(1)]
     #[Assert\NotBlank(
         message: "Le champ editeur ne doit pas être vide."
@@ -103,7 +103,7 @@ class VideoGame
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'videoGames')]
-    #[Groups("video_game")]
+    #[Groups("video_game:read")]
     #[MaxDepth(1)]
     #[Assert\NotBlank(
         message: "Le champ catégorie ne doit pas être vide."
