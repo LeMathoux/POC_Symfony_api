@@ -51,9 +51,9 @@ role : ROLE_ADMIN
 
 ## générer le jeton JWT
 
-Aller sur [Swagger](http://127.0.0.1:8000/api/doc)
-puis dans la catégorie "Authentification" inserer les informations dans le "try out".
-recuperer le token et le mettre dans "Autorize" en haut du swagger.
+- Aller sur [Swagger](http://127.0.0.1:8000/api/doc).
+- puis dans la catégorie "Authentification" inserer les informations dans le "try out".
+- recuperer le token et le mettre dans "Autorize" en haut du swagger.
 
 ## lancer la commande symfony SendUpcomingGamesEmail
 ```bash
