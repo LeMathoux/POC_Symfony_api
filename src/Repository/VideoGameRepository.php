@@ -24,13 +24,19 @@ class VideoGameRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getfutureReleases(\DateTimeImmutable $currentDate){
-        $qb = $this->createQueryBuilder('vg')
-            ->andWhere('vg.releaseDate > :currentDate')
-            ->setParameter('currentDate', $currentDate)
-            ->orderBy('vg.releaseDate', 'ASC');
-            
-        return $qb->getQuery()->getResult();
+    public function findUpcomingGames(): array
+    {
+        $today = new \DateTimeImmutable();
+        $endDate = $today->modify("+7 days");
+
+        return $this->createQueryBuilder('g')
+            ->where('g.releaseDate >= :today')
+            ->andWhere('g.releaseDate <= :endDate')
+            ->setParameter('today', $today->format('Y-m-d 00:00:00'))
+            ->setParameter('endDate', $endDate->format('Y-m-d 23:59:59'))
+            ->orderBy('g.releaseDate', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**
