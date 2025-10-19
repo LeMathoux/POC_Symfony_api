@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Jeux à venir</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f9fafb; color: #1f2937; padding: 20px;">
+
+    <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 16px;">Jeux à venir cette semaine :</h1>
+
+    <ul>
+        {% for game in videoGames %}
+            <li style="padding: 8px; background-color: #f3f4f6; border-radius: 4px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;">
+                
+                {% if game.coverImage %}
+                    <img src="{{ asset('uploads/covers/' ~ game.coverImage) }}" alt="{{ game.title|e }}" style="width: 60px; height: auto; border-radius: 4px;">
+                {% endif %}
+                
+                <div>
+                    <span style="font-weight: bold;">{{ game.title|e }}</span>
+                    <span style="color: #4b5563;"> - Sortie : {{ game.releaseDate|date('d/m/Y') }}</span>
+                </div>
+            </li>
+        {% else %}
+            <li style="color: #6b7280; font-style: italic;">Aucun jeu à venir cette semaine.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
+
+</html>

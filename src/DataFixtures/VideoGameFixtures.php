@@ -9,14 +9,23 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class VideoGameFixtures extends Fixture implements DependentFixtureInterface
 {
     public const VIDEOGAME_REFERENCE = 'videogame_';
 
+    private $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
+        $coversDir = $this->params->get('covers_directory');
 
         for ($i = 0; $i < 20; $i++) {
             $videoGame = new VideoGame();
@@ -31,6 +40,13 @@ class VideoGameFixtures extends Fixture implements DependentFixtureInterface
                 $category = $this->getReference(CategoryFixtures::CATEGORY_REFERENCE . $catIndex, Category::class);
                 $videoGame->addCategory($category);
             }
+
+            $imageUrl = 'https://picsum.photos/200/300';
+            $imageContents = file_get_contents($imageUrl);
+            $imageName = 'cover_' . $i . '.jpg';
+            file_put_contents($coversDir . $imageName, $imageContents);
+
+            $videoGame->setCoverImage($imageName);
 
             $manager->persist($videoGame);
 

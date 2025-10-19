@@ -60,7 +60,13 @@ use Symfony\Component\Validator\Constraints as Assert;
                     new OA\Property(property: 'name', type: 'string', example: 'Action')
                 ]
             )
-        )
+        ),
+        new OA\Property(
+            property: 'coverImage', 
+            type: 'string', 
+            description: 'Nom du fichier de l\'image de couverture du jeu',
+            example: 'cover12345.jpg'
+        ),
     ]
 )]
 class VideoGame
@@ -109,6 +115,9 @@ class VideoGame
         message: "Le champ catégorie ne doit pas être vide."
     )]
     private Collection $categories;
+
+    #[ORM\Column(length: 255)]
+    private ?string $coverImage = null;
 
     public function __construct()
     {
@@ -164,6 +173,13 @@ class VideoGame
         return $this->categories;
     }
 
+    public function clearCategories(): static
+    {
+        $this->categories->clear();
+
+        return $this;
+    }
+
     public function addCategory(Category $category): static
     {
         if (!$this->categories->contains($category)) {
@@ -176,6 +192,18 @@ class VideoGame
     public function removeCategory(Category $category): static
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    public function getCoverImage(): ?string
+    {
+        return $this->coverImage;
+    }
+
+    public function setCoverImage(string $coverImage): static
+    {
+        $this->coverImage = $coverImage;
 
         return $this;
     }

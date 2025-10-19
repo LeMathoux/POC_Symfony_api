@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Twig\Environment;
 
 #[AsCommand(
     name: 'app:send-upcoming-games-email',
@@ -20,13 +21,15 @@ class SendUpcomingGamesEmailCommand extends Command
     private VideoGameRepository $videoGameRepository;
     private UserRepository $userRepository;
     private EmailService $emailService;
+    private Environment $twig;
 
-    public function __construct(VideoGameRepository $videoGameRepository, UserRepository $userRepository, EmailService $emailService)
+    public function __construct(VideoGameRepository $videoGameRepository, UserRepository $userRepository, EmailService $emailService, Environment $twig)
     {
         parent::__construct();
         $this->videoGameRepository = $videoGameRepository;
         $this->emailService = $emailService;
         $this->userRepository = $userRepository;
+        $this->twig = $twig;
     }
 
     protected function configure(): void
@@ -51,11 +54,9 @@ class SendUpcomingGamesEmailCommand extends Command
             return Command::SUCCESS;
         }
 
-        $content = '<h1>Jeux à venir cette semaine :</h1><ul>';
-        foreach ($videoGames as $videoGame) {
-            $content .= '<li>' . htmlspecialchars($videoGame->getTitle()) . ' - Sortie : ' . $videoGame->getReleaseDate()->format('d/m/Y') . '</li>';
-        }
-        $content .= '</ul>';
+        $content = $this->twig->render('email/newsletter.html.twig', [
+            'videoGames' => $videoGames,
+        ]);
 
         foreach ($subscribers as $subscriber) {
             try {
